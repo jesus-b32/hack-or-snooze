@@ -21,4 +21,12 @@ nav {
     margin-left: auto;
     text-align: right;
   }
+  .nav-left {
+    margin-left: 10px;
+    padding: 0px 10px 0px 10px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    /* margin-right: auto;
+    text-align: left; */
+  }
   

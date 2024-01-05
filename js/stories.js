@@ -53,3 +53,46 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+
+/** Handle story submit form submission. DONE*/
+async function submitStory(evt) {
+  console.debug("submitStory", evt);
+  evt.preventDefault();
+
+  const author = $("#story-author").val();
+  const title = $("#story-title").val();
+  const url = $("#story-url").val();
+
+  // User.signup retrieves user info from API and returns User instance
+  // which we'll make the globally-available, logged-in user.
+  const story = await StoryList.addStory(currentUser, {title, author, url});
+
+  const $story = generateStoryMarkup(story);
+  $allStoriesList.prepend($story);
+  
+  // hide the form and reset it
+  $submitForm.slideUp("slow");
+  $submitForm.trigger("reset");
+}
+
+$submitForm.on("submit", submitStory);
+
+
+//need a star symbol to toggle between adding or deleting from favorite list. Then add a click event for all stars that call 
+//addFavorite(empty start) or deleteFavorite(solid star)
+function putFavoritesOnPage() {
+  console.debug("putFavoritesOnPage");
+
+  // jQuery method;  removes all child (and other descendant) elements, along with any text within the set of matched elements.
+  // remove all storeies from #all-stories-list
+  $favoriteList.empty();
+
+  // loop through all of our stories and generate HTML for them
+  for (let story of currentUser.favorites) {
+    const $story = generateStoryMarkup(story);
+    $favoriteList.append($story);
+  }
+
+  $favoriteList.show();
+}

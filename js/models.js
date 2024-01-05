@@ -22,10 +22,9 @@ class Story {
   }
 
   /** Parses hostname out of URL and returns it. */
-
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    const url = new URL(this.url);
+    return url.hostname;
   }
 }
 
@@ -77,10 +76,9 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory(user, {title, author, url}) {
-    // UNIMPLEMENTED: complete this function!
+  static async addStory(user, {title, author, url}) { //Almost done
        // query the /stories endpoint (auth required)
-       try {
+      //  try {
         const response = await axios({
           url: `${BASE_URL}/stories`,
           method: "POST",
@@ -88,29 +86,16 @@ class StoryList {
         });
 
         const newStory = new Story(response.data.story);
-        // this.stories.unshift(story);
+        // this.stories.unshift(newStory);
+        // console.log(this);
         storyList.stories.unshift(newStory);
-        user.ownStories.unshift(newStory);
+        // user.ownStories.unshift(newStory);
 
         return newStory;
-       } catch(e) {
-        return ApiResponse.parse(e);
-       }
-
-        // let { story } = response.data; // destructuring; storing story object into story variable
-
-        // const userStory = new Story( // store user object data to class Story properties/varaibles
-        //   {
-        //     storyId: story.storyId,
-        //     title: story.title,
-        //     author: story.author,
-        //     url: story.url,
-        //     username: story.username,
-        //     createdAt: story.createdAt
-        //   }
-        // );
-        // storyList.stories.push(userStory);
-        // return userStory;
+      //  } catch(e) {
+      //   // alert('Error Occured');
+      //   // return ApiResponse.parse(e);
+      //  }
   }
 }
 
@@ -231,4 +216,39 @@ class User {
       return null;
     }
   }
+
+
+  async addFavorite(story) {
+    this.favorites.push(story);
+    await this.addOrDeleteFavorite("POST", story);
+  }
+
+  async deleteFavorite(story) {
+    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId);
+    await this.addOrDeleteFavorite("DELETE", story);
+  }
+
+
+  async addOrDeleteFavorite(story, methodName) {
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: methodName,
+      data: {token: this.loginToken},
+    });
+
+    // let { user } = response.data; // destructuring; stroing user object into user variable
+
+    // return new User( // store user object data to class User properties/varaibles
+    //   {
+    //     username: user.username,
+    //     name: user.name,
+    //     createdAt: user.createdAt,
+    //     favorites: user.favorites,
+    //     ownStories: user.stories
+    //   }
+    // );
+  }
+
+
+
 }

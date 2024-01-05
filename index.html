@@ -37,12 +37,36 @@
   <div class="navbar-brand">
     <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
   </div>
+  <div class="nav-left">
+    <a class="nav-link" href="#" id="nav-submit">Submit Story</a>
+    <a class="nav-link" href="#" id="nav-favorite">Favorites</a>
+  </div>
   <div class="nav-right">
     <a class="nav-link" href="#" id="nav-login">login/signup</a>
     <a class="nav-link" href="#" id="nav-user-profile"></a>
     <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
   </div>
 </nav>
+
+<!-- Add New Story Form -->
+<section class="account-forms-container container">
+  <form action="#" id="story-form" class="hidden" method="post">
+    <h4>Add a Story</h4>
+    <div class="story-input">
+      <label for="story-author">Author</label>
+      <input type="text" id="story-author" placeholder="Story Author">
+    </div>
+    <div class="story-input">
+      <label for="story-author">Title</label>
+      <input type="text" id="story-title" placeholder="Story Title">
+    </div>
+    <div class="story-input">
+      <label for="story-author">URL</label>
+      <input type="text" id="story-url" placeholder="Story URL">
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+</section>
 
 <!-- area for stories (all stories, user stories, favorites) -->
 <section class="stories-container container">
@@ -53,12 +77,19 @@
   <!-- List of all stories -->
   <ol id="all-stories-list" class="stories-list"></ol>
 
+
+  <!-- No favorite message (removed by JS after stories is added to favorite list) -->
+  <!-- <div id="stories-loading-msg" class="hidden">No favorites added!</div> -->
+  <!-- List of all stories -->
+  <ol id="favorite-stories-list" class="stories-list hidden"></ol>
+
 </section>
 
 <!-- Login and signup forms -->
 <section class="account-forms-container container">
 
   <!-- Login form -->
+  <!-- action = '#' indicates that the form stays on the same page -->
   <form action="#" id="login-form" class="account-form hidden" method="post">
     <h4>Login</h4>
     <div class="login-input">
