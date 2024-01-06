@@ -6,7 +6,9 @@ const $body = $("body");
 
 const $storiesLoadingMsg = $("#stories-loading-msg");
 const $allStoriesList = $("#all-stories-list");
+const $noFavoritesMsg = $('#no-favorites-msg');
 const $favoriteList = $("#favorite-stories-list");
+const $storiesLists = $('.stories-list'); // consist of all stories, favoiirtes stories, and my stories
 
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
@@ -27,10 +29,13 @@ const $navFavorite = $('#nav-favorite');
 function hidePageComponents() {
   const components = [
     $allStoriesList,
+    $noFavoritesMsg,
     $favoriteList,
     $loginForm,
     $signupForm,
-    $submitForm
+    $submitForm,
+    // $navSubmit,
+    // $navFavorite
   ];
   components.forEach(c => c.hide()); // jQuery method that hides the selected elements.This is similar to the CSS property display:none.
   // Hidden elements will not be displayed at all (no longer affects the layout of the page).

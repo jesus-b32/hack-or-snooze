@@ -76,7 +76,7 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  static async addStory(user, {title, author, url}) { //Almost done
+  static async addStory(user, {title, author, url}) {
        // query the /stories endpoint (auth required)
       //  try {
         const response = await axios({
@@ -86,15 +86,11 @@ class StoryList {
         });
 
         const newStory = new Story(response.data.story);
-        // this.stories.unshift(newStory);
-        // console.log(this);
         storyList.stories.unshift(newStory);
-        // user.ownStories.unshift(newStory);
 
         return newStory;
       //  } catch(e) {
       //   // alert('Error Occured');
-      //   // return ApiResponse.parse(e);
       //  }
   }
 }
@@ -217,38 +213,35 @@ class User {
     }
   }
 
-
+  /** Add story to user's favorite list
+   */
   async addFavorite(story) {
     this.favorites.push(story);
     await this.addOrDeleteFavorite("POST", story);
   }
 
+  /** Delete a story from user's favorite list
+   */
   async deleteFavorite(story) {
-    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId);
+    this.favorites = this.favorites.filter(val => {
+      return val.storyId !== story.storyId;
+    });
     await this.addOrDeleteFavorite("DELETE", story);
   }
 
 
-  async addOrDeleteFavorite(story, methodName) {
+  async addOrDeleteFavorite(methodName, story) {
     await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
       method: methodName,
       data: {token: this.loginToken},
     });
-
-    // let { user } = response.data; // destructuring; stroing user object into user variable
-
-    // return new User( // store user object data to class User properties/varaibles
-    //   {
-    //     username: user.username,
-    //     name: user.name,
-    //     createdAt: user.createdAt,
-    //     favorites: user.favorites,
-    //     ownStories: user.stories
-    //   }
-    // );
   }
 
-
-
+  // return true if story is in the users favorite stories list
+  isFavorite(story) {
+    return this.favorites.some(val => {
+      return val.storyId === story.storyId;
+    });
+  }
 }

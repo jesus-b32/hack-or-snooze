@@ -13,6 +13,21 @@ async function getAndShowStoriesOnStart() {
   putStoriesOnPage();
 }
 
+
+// create HTML for star based on whether story is favorited or not
+function generateStar(story, user) {
+  let starStyle = '';
+  if (user.isFavorite(story)) {
+    starStyle = 'fa-solid';
+  } else {
+    starStyle = 'fa-regular';
+  }
+  return `<span class="star"><i class="${starStyle} fa-star"></i></span>`;
+}
+
+
+
+
 /**
  * A render method to render HTML for an individual Story instance (the LI that goes in #all-stories-list)
  * - story: an instance of Story
@@ -21,11 +36,21 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
+  console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
+
+  // if user is logged in, display favorite stars; otherwise don't
+  let starHTML = '';
+    if (currentUser) {
+      starHTML = generateStar(story, currentUser);
+    } else {
+      starHTML = '';
+    }
+
   return $(`
       <li id="${story.storyId}">
+      ${starHTML}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -35,6 +60,8 @@ function generateStoryMarkup(story) {
       </li>
     `);
 }
+
+
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
@@ -79,8 +106,7 @@ async function submitStory(evt) {
 $submitForm.on("submit", submitStory);
 
 
-//need a star symbol to toggle between adding or deleting from favorite list. Then add a click event for all stars that call 
-//addFavorite(empty start) or deleteFavorite(solid star)
+/** Display user favorite list after favorite tab is clicked on*/
 function putFavoritesOnPage() {
   console.debug("putFavoritesOnPage");
 
@@ -96,3 +122,30 @@ function putFavoritesOnPage() {
 
   $favoriteList.show();
 }
+
+/** click event handler for when user clicks on favorite start symbol
+ * Will add a story to user favorite list and update star to be solid if story clicked was unfavorited
+ * Will delete a story from user favorite list and update star to be empty if story clicked was favorited
+*/
+async function toggleFavoriteStatus(e) {
+  console.debug("toggleFavoriteStatus", e);
+  
+  const $star = $(e.target);
+  const storyId = $star.closest('li').attr('id');
+  const story = storyList.stories.find(val => { // find the story instance from storylist that matches the storyId selected
+    return val.storyId === storyId;
+  });
+
+  // Check if item is favortied (solid star)
+  if($star.hasClass('fa-solid')) {
+    // If favorite when clicked: remove from user's favorite list and change to empty star
+    await currentUser.deleteFavorite(story);
+    $star.closest('i').toggleClass('fa-solid fa-regular');
+  } else {
+    // If not favorite when clicked: add to user's favorite list and change to solid star
+    await currentUser.addFavorite(story);
+    $star.closest('i').toggleClass('fa-solid fa-regular');
+  }
+}
+
+$storiesLists.on('click', '.star', toggleFavoriteStatus);

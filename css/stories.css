@@ -15,6 +15,12 @@
     font-size: 150%;
     margin: 20px 30px;
   }
+
+  #no-favorites-msg {
+    font-weight: bold;
+    font-size: 100%;
+    margin: 40px 0px 40px 20px;
+  }
   
   
   /* Individual stories */
@@ -36,5 +42,9 @@
   
   .story-user {
     display: block;
+  }
+
+  .star {
+    cursor: pointer;
   }
   

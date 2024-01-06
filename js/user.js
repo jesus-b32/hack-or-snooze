@@ -115,7 +115,9 @@ function updateUIOnUserLogin() {
 
   // jQuery method that shows the hidden, selected elements. 
   //show() works on elements hidden with jQuery methods and display:none in CSS (but not visibility:hidden)
-  $allStoriesList.show();
+  hidePageComponents();
+  putStoriesOnPage();
+  // $allStoriesList.show();
 
   updateNavOnLogin();
 }

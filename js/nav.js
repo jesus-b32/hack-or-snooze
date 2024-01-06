@@ -33,6 +33,8 @@ function updateNavOnLogin() {
   $navLogin.hide();
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
+  $navSubmit.show();
+  $navFavorite.show();
 }
 
 
@@ -47,12 +49,17 @@ function navSubmitClick(evt) {
 
 $navSubmit.on("click", navSubmitClick);
 
-/** Show Favorite list on click on "Favorites" */
 
-function navFavoriteClick(evt) { //
+/** Show Favorite list on click on "Favorites" tab*/
+function navFavoriteClick(evt) { 
   console.debug("navFavoriteClick", evt);
+
   hidePageComponents();
-  // $submitForm.show();
-  putFavoritesOnPage();
+
+  if (currentUser.favorites.length === 0) { // check if favorite list is empty
+    $noFavoritesMsg.show();
+  } else {
+    putFavoritesOnPage();
+  }
 }
 $navFavorite.on("click", navFavoriteClick);
