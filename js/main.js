@@ -5,10 +5,13 @@
 const $body = $("body");
 
 const $storiesLoadingMsg = $("#stories-loading-msg");
-const $allStoriesList = $("#all-stories-list");
 const $noFavoritesMsg = $('#no-favorites-msg');
+const $noUserStoriesMsg = $('#no-user-stories-msg');
+
+const $allStoriesList = $("#all-stories-list");
 const $favoriteList = $("#favorite-stories-list");
-const $storiesLists = $('.stories-list'); // consist of all stories, favoiirtes stories, and my stories
+const $userStoriesList = $('#user-stories-list')
+const $storiesLists = $('.stories-list'); // consist of all stories, favoiirtes stories, and user stories
 
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
@@ -20,6 +23,7 @@ const $navLogOut = $("#nav-logout");
 
 const $navSubmit = $('#nav-submit');
 const $navFavorite = $('#nav-favorite');
+const $navMyStories = $('#nav-my-stories');
 
 /** To make it easier for individual components to show just themselves, this
  * is a useful function that hides pretty much everything on the page. After
@@ -30,12 +34,12 @@ function hidePageComponents() {
   const components = [
     $allStoriesList,
     $noFavoritesMsg,
+    $noUserStoriesMsg,
     $favoriteList,
+    $userStoriesList,
     $loginForm,
     $signupForm,
     $submitForm,
-    // $navSubmit,
-    // $navFavorite
   ];
   components.forEach(c => c.hide()); // jQuery method that hides the selected elements.This is similar to the CSS property display:none.
   // Hidden elements will not be displayed at all (no longer affects the layout of the page).

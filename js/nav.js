@@ -8,8 +8,10 @@
 
 function navAllStories(evt) {
   console.debug("navAllStories", evt);
+
   hidePageComponents();
   putStoriesOnPage();
+  // console.log('Storylist After deletestory called and clicked on site name: ', storyList);
 }
 
 $body.on("click", "#nav-all", navAllStories);
@@ -18,6 +20,7 @@ $body.on("click", "#nav-all", navAllStories);
 
 function navLoginClick(evt) {
   console.debug("navLoginClick", evt);
+
   hidePageComponents();
   $loginForm.show();
   $signupForm.show();
@@ -29,12 +32,14 @@ $navLogin.on("click", navLoginClick);
 
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
+  
   $(".main-nav-links").show(); // . class "main-nav-links" not currently defined
   $navLogin.hide();
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
   $navSubmit.show();
   $navFavorite.show();
+  $navMyStories.show();
 }
 
 
@@ -42,6 +47,7 @@ function updateNavOnLogin() {
 
 function navSubmitClick(evt) {
   console.debug("navSubmitClick", evt);
+
   hidePageComponents();
   $submitForm.show();
   putStoriesOnPage();
@@ -55,11 +61,16 @@ function navFavoriteClick(evt) {
   console.debug("navFavoriteClick", evt);
 
   hidePageComponents();
-
-  if (currentUser.favorites.length === 0) { // check if favorite list is empty
-    $noFavoritesMsg.show();
-  } else {
-    putFavoritesOnPage();
-  }
+  putFavoritesOnPage();
 }
 $navFavorite.on("click", navFavoriteClick);
+
+
+/** Show user own stories list on click on "My Stories" tab; WORKING ON THIS*/ 
+function navMyStoriesClick(evt) { 
+  console.debug("navMyStoriesClick", evt);
+
+  hidePageComponents();
+  putUserStoriesOnPage();
+}
+$navMyStories.on("click", navMyStoriesClick);

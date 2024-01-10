@@ -117,7 +117,6 @@ function updateUIOnUserLogin() {
   //show() works on elements hidden with jQuery methods and display:none in CSS (but not visibility:hidden)
   hidePageComponents();
   putStoriesOnPage();
-  // $allStoriesList.show();
 
   updateNavOnLogin();
 }

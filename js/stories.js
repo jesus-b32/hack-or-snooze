@@ -25,7 +25,15 @@ function generateStar(story, user) {
   return `<span class="star"><i class="${starStyle} fa-star"></i></span>`;
 }
 
+// create HTML for star based on whether story is favorited or not
+function generateTrash(user) {
+  let trash = '';
+  if (user.ownStories.length) {
+    trash = '<span class="trash"><i class="fa-solid fa-trash-can"></i></span>';
+  } 
 
+  return trash;
+}
 
 
 /**
@@ -42,14 +50,17 @@ function generateStoryMarkup(story) {
 
   // if user is logged in, display favorite stars; otherwise don't
   let starHTML = '';
+  let trashHTML = '';
     if (currentUser) {
       starHTML = generateStar(story, currentUser);
+      trashHTML = generateTrash(currentUser);
     } else {
       starHTML = '';
     }
 
   return $(`
       <li id="${story.storyId}">
+      ${trashHTML}
       ${starHTML}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
@@ -58,6 +69,7 @@ function generateStoryMarkup(story) {
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
       </li>
+      <hr>
     `);
 }
 
@@ -77,12 +89,12 @@ function putStoriesOnPage() {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
   }
-
+  $('.trash').remove();
   $allStoriesList.show();
 }
 
 
-/** Handle story submit form submission. DONE*/
+/** Handle story submit form submission. update this function*/
 async function submitStory(evt) {
   console.debug("submitStory", evt);
   evt.preventDefault();
@@ -93,10 +105,11 @@ async function submitStory(evt) {
 
   // User.signup retrieves user info from API and returns User instance
   // which we'll make the globally-available, logged-in user.
-  const story = await StoryList.addStory(currentUser, {title, author, url});
+  const story = await storyList.addStory(currentUser, {title, author, url});
 
   const $story = generateStoryMarkup(story);
   $allStoriesList.prepend($story);
+  $('.trash').remove();
   
   // hide the form and reset it
   $submitForm.slideUp("slow");
@@ -110,16 +123,22 @@ $submitForm.on("submit", submitStory);
 function putFavoritesOnPage() {
   console.debug("putFavoritesOnPage");
 
+  if (currentUser.favorites.length === 0) { // check if favorite list is empty
+    $noFavoritesMsg.show();
+    return;
+  }
+
   // jQuery method;  removes all child (and other descendant) elements, along with any text within the set of matched elements.
   // remove all storeies from #all-stories-list
   $favoriteList.empty();
 
-  // loop through all of our stories and generate HTML for them
+  // loop through all of user favorite stories and generate HTML for them
   for (let story of currentUser.favorites) {
     const $story = generateStoryMarkup(story);
     $favoriteList.append($story);
   }
 
+  $('.trash').remove();
   $favoriteList.show();
 }
 
@@ -149,3 +168,45 @@ async function toggleFavoriteStatus(e) {
 }
 
 $storiesLists.on('click', '.star', toggleFavoriteStatus);
+
+
+
+/** Display user own stories list after "my Stories" tab is clicked on*/
+function putUserStoriesOnPage() {
+  console.debug("putUserStoriesOnPage");
+
+  if (currentUser.ownStories.length === 0) { // check if user's own story list is empty
+    $noUserStoriesMsg.show();
+    return;
+  }
+
+  // jQuery method;  removes all child (and other descendant) elements, along with any text within the set of matched elements.
+  // remove all storeies from #all-stories-list
+  $userStoriesList.empty();
+
+  // loop through all of user own stories and generate HTML for them
+  for (let story of currentUser.ownStories) {
+    const $story = generateStoryMarkup(story);
+    $userStoriesList.append($story);
+  }
+
+  $userStoriesList.show();
+}
+
+
+/** click event handler for when user clicks on trash can symbol
+ * Will remove a story from user own story list and update webpage to not dsiplay story anymore
+*/
+async function deleteUserStories(e) {
+  console.debug("deleteUserStories", e);
+  
+  const $trash = $(e.target);
+  const storyId = $trash.closest('li').attr('id');
+
+  await storyList.deleteStory(currentUser, storyId);
+
+  hidePageComponents();
+  putUserStoriesOnPage();
+}
+
+$userStoriesList.on('click', '.trash', deleteUserStories);

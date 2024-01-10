@@ -36,6 +36,7 @@
   <div class="nav-left">
     <a class="nav-link hidden" href="#" id="nav-submit">Submit Story</a>
     <a class="nav-link hidden" href="#" id="nav-favorite">Favorites</a>
+    <a class="nav-link hidden" href="#" id="nav-my-stories">My Stories</a>
   </div>
   <div class="nav-right">
     <a class="nav-link" href="#" id="nav-login">login/signup</a>
@@ -61,6 +62,7 @@
       <input type="text" id="story-url" placeholder="Story URL">
     </div>
     <button type="submit">Submit</button>
+    <hr>
   </form>
 </section>
 
@@ -76,8 +78,15 @@
 
   <!-- No favorite message (removed by JS after stories is added to favorite list) -->
   <div id="no-favorites-msg" class="hidden">No favorites added!</div>
-  <!-- List of all stories -->
+  <!-- List of all favorited stories -->
   <ol id="favorite-stories-list" class="stories-list hidden"></ol>
+
+
+  <!-- No favorite message (removed by JS after stories is added to favorite list) -->
+  <div id="no-user-stories-msg" class="hidden">No stories added yet!</div>
+  <!-- List of all user stories -->
+  <ol id="user-stories-list" class="stories-list hidden"></ol>
+
 
 </section>
 

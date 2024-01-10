@@ -16,7 +16,7 @@
     margin: 20px 30px;
   }
 
-  #no-favorites-msg {
+  #no-favorites-msg, #no-user-stories-msg {
     font-weight: bold;
     font-size: 100%;
     margin: 40px 0px 40px 20px;
@@ -37,14 +37,22 @@
   }
   
   .story-author {
-    margin-left: 2em;
+    margin: 0.5em 0em 0.5em 2em;
+    display: block;
+    color: rgb(29, 150, 29);
   }
   
   .story-user {
+    margin: 0.5em 0em 0.5em 2em;
     display: block;
+    color: gold;
   }
 
-  .star {
+  .star, .trash {
     cursor: pointer;
+  }
+
+  .trash:hover {
+    color: red;
   }
   

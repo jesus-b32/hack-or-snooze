@@ -97,7 +97,7 @@ body {
     background-color: dimgray;
   }
   
-  form > hr {
+  hr {
     margin: 0;
     border: 1px solid lightgray;
   }

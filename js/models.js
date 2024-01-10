@@ -76,7 +76,7 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  static async addStory(user, {title, author, url}) {
+  async addStory(user, {title, author, url}) {
        // query the /stories endpoint (auth required)
       //  try {
         const response = await axios({
@@ -86,12 +86,37 @@ class StoryList {
         });
 
         const newStory = new Story(response.data.story);
-        storyList.stories.unshift(newStory);
+        this.stories.unshift(newStory);
+        user.ownStories.unshift(newStory);
 
         return newStory;
       //  } catch(e) {
       //   // alert('Error Occured');
       //  }
+  }
+
+      /** Delete a story from API and remove it ffrom story list.
+   * - user - the current instance of User who will post the story
+   * - obj of {title, author, url}
+   *
+   * Returns the new Story instance
+   */
+  async deleteStory(user, storyId) {
+    user.ownStories = user.ownStories.filter(val => {
+      return val.storyId !== storyId;
+    });
+    user.favorites = user.favorites.filter(val => {
+      return val.storyId !== storyId;
+    });
+    this.stories = this.stories.filter(val => {
+      return val.storyId !== storyId;
+    });
+
+    await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "DELETE",
+      data: {token: user.loginToken},
+    });
   }
 }
 
