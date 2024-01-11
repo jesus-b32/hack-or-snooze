@@ -91,7 +91,7 @@
 </section>
 
 <!-- Login and signup forms -->
-<section class="account-forms-container container">
+<section class="account-forms-container container" id="login-signup-section">
 
   <!-- Login form -->
   <!-- action = '#' indicates that the form stays on the same page -->
@@ -104,6 +104,7 @@
     <div class="login-input">
       <label for="login-password">password</label>
       <input id="login-password" type="password" autocomplete="current-password">
+      <i class="fa-solid fa-eye-slash" id="login-eye"></i>
     </div>
     <button type="submit">login</button>
     <hr>
@@ -127,6 +128,7 @@
     <div class="login-input">
       <label for="signup-password">password</label>
       <input id="signup-password" autocomplete="new-password" type="password">
+      <i class="fa-solid fa-eye-slash" id="signup-eye"></i>
     </div>
     <button type="submit">create account</button>
   </form>

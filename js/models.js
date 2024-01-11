@@ -118,6 +118,27 @@ class StoryList {
       data: {token: user.loginToken},
     });
   }
+
+        /** Update a story from API and update the sotru on story list and dsiplay updated storylist.
+   * - user - the current instance of User who will post the story
+   * - obj of {title, author, url}
+   *
+   * Returns the new Story instance
+   */
+  async updateStory(user, storyId, {title, author, url}) {    
+    await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "PATCH",
+      data: {token: user.loginToken, story: {title, author, url}},
+    });
+
+    const newStory = new Story(response.data.story);
+    this.stories.unshift(newStory); //need to append updated story to same location as previous story; use splice to remove old story and replace it with new one \
+    //or just edit the title, author, and url values of the current story(probably the better option)
+    user.ownStories.unshift(newStory); //same as above
+
+    return newStory;
+  }
 }
 
 
@@ -159,24 +180,29 @@ class User {
    */
 
   static async signup(username, password, name) {
-    const response = await axios({
-      url: `${BASE_URL}/signup`,
-      method: "POST",
-      data: { user: { username, password, name } },
-    });
-
-    let { user } = response.data; // destructuring; stroing user object into user variable
-
-    return new User( // store user object data to class User properties/varaibles
-      {
-        username: user.username,
-        name: user.name,
-        createdAt: user.createdAt,
-        favorites: user.favorites,
-        ownStories: user.stories
-      },
-      response.data.token
-    );
+    try {
+      const response = await axios({
+        url: `${BASE_URL}/signup`,
+        method: "POST",
+        data: { user: { username, password, name } },
+      });
+  
+      let { user } = response.data; // destructuring; stroing user object into user variable
+  
+      return new User( // store user object data to class User properties/varaibles
+        {
+          username: user.username,
+          name: user.name,
+          createdAt: user.createdAt,
+          favorites: user.favorites,
+          ownStories: user.stories
+        },
+        response.data.token
+      );
+    } catch(e) {
+      console.log(e.response.data.error.message);
+      return e;
+    }
   }
 
   /** Login in user with API, make User instance & return it.
@@ -186,26 +212,30 @@ class User {
    */
 
   static async login(username, password) {
-    const response = await axios({
-      url: `${BASE_URL}/login`,
-      method: "POST",
-      data: { user: { username, password } },
-    });
-
-    // console.log(response);
-    
-    let { user } = response.data; // destructuring; stroing user object into user variable
-
-    return new User( // store user object data to class User properties/varaibles
-      {
-        username: user.username,
-        name: user.name,
-        createdAt: user.createdAt,
-        favorites: user.favorites,
-        ownStories: user.stories
-      },
-      response.data.token
-    );
+    try {
+      const response = await axios({
+        url: `${BASE_URL}/login`,
+        method: "POST",
+        data: { user: { username, password } },
+      });
+  
+      
+      let { user } = response.data; // destructuring; stroing user object into user variable
+  
+      return new User( // store user object data to class User properties/varaibles
+        {
+          username: user.username,
+          name: user.name,
+          createdAt: user.createdAt,
+          favorites: user.favorites,
+          ownStories: user.stories
+        },
+        response.data.token
+      );
+    } catch (e) {
+      console.log(e.response.data.error.message);
+      return e;
+    }
   }
 
   /** When we already have credentials (token & username) for a user,

@@ -4,6 +4,38 @@
 let currentUser;
 
 /******************************************************************************
+ * passowrd visibility toggle for login/signup/login
+ */
+
+/** Handle password toggle click for login form. */
+function loginTogglePassword(e) {
+  // toggle the passowrd type attribute
+  const password = $("#login-password");
+  const type = password.attr('type') === 'password' ? 'text' : 'password';
+  password.attr('type', type);
+
+  // toggle the eye / eye slash icon
+  $("#login-eye").toggleClass('fa-eye-slash fa-eye');
+}
+
+$("#login-eye").on('click', loginTogglePassword);
+
+
+
+/** Handle password toggle click for login form. */
+function signupTogglePassword(e) {
+  // toggle the passowrd type attribute
+  const password = $("#signup-password");
+  const type = password.attr('type') === 'password' ? 'text' : 'password';
+  password.attr('type', type);
+
+  // toggle the eye / eye slash icon
+  $("#signup-eye").toggleClass('fa-eye-slash fa-eye');
+}
+
+$("#signup-eye").on('click', signupTogglePassword);
+
+/******************************************************************************
  * User login/signup/login
  */
 
@@ -23,6 +55,11 @@ async function login(evt) {
 
   // jQuery method; triggers the specified event and the default behavior of an event for the selected elements.
   // will trigger form rest event, which resets the value of all elements in a form, and default form behavior of reloading webpage
+  if(!(currentUser instanceof User)){
+    alert(currentUser.response.data.error.message);
+    return;
+  }
+  
   $loginForm.trigger("reset");
 
   saveUserCredentialsInLocalStorage();
@@ -44,6 +81,11 @@ async function signup(evt) {
   // User.signup retrieves user info from API and returns User instance
   // which we'll make the globally-available, logged-in user.
   currentUser = await User.signup(username, password, name);
+
+  if(!(currentUser instanceof User)){
+    alert(currentUser.response.data.error.message);
+    return;
+  }
 
   saveUserCredentialsInLocalStorage();
   updateUIOnUserLogin();

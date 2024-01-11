@@ -13,6 +13,8 @@ const $favoriteList = $("#favorite-stories-list");
 const $userStoriesList = $('#user-stories-list')
 const $storiesLists = $('.stories-list'); // consist of all stories, favoiirtes stories, and user stories
 
+// const $eyeSymbol = $(".eye");
+// const $loginSignupSection = $("#login-signup-section");
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
 const $submitForm = $('#story-form');
