@@ -35,6 +35,20 @@ function signupTogglePassword(e) {
 
 $("#signup-eye").on('click', signupTogglePassword);
 
+
+/** Handle password toggle click for login form. */
+function updateUserTogglePassword(e) {
+  // toggle the passowrd type attribute
+  const password = $("#update-password");
+  const type = password.attr('type') === 'password' ? 'text' : 'password';
+  password.attr('type', type);
+
+  // toggle the eye / eye slash icon
+  $("#update-user-eye").toggleClass('fa-eye-slash fa-eye');
+}
+
+$("#update-user-eye").on('click', updateUserTogglePassword);
+
 /******************************************************************************
  * User login/signup/login
  */
@@ -59,7 +73,7 @@ async function login(evt) {
     alert(currentUser.response.data.error.message);
     return;
   }
-  
+
   $loginForm.trigger("reset");
 
   saveUserCredentialsInLocalStorage();

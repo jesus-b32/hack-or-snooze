@@ -233,7 +233,7 @@ $userStoriesList.on('click', '.trash', deleteUserStories);
 
 
 
-/** click event handler for when user clicks on trash can symbol
+/** click event handler for when user clicks on edit button on user own story list
  * Will remove a story from user own story list and update webpage to not dsiplay story anymore
 */
 function editButtonClick(e) {
@@ -243,52 +243,45 @@ function editButtonClick(e) {
   editStoryID = $edit.closest('li').attr('id');
 
   hidePageComponents();
-  $submitForm.show();
+  $updateStoryForm.show();
 }
 
-$storiesLists.on('click', '.edit', editButtonClick);
+$userStoriesList.on('click', '.edit', editButtonClick);
 
 
 
 
-/** click event handler for when user clicks on trash can symbol
+/** click event handler for when user clicks on edit button
+ * Will update the story from user own story list and update webpage to  display updated story
+ * 
+*/
+async function updateUserStory(evt) {
+  console.debug("updateUserStory", evt);
+  evt.preventDefault();
+
+  const author = $("#update-story-author").val();
+  const title = $("#update-story-title").val();
+  const url = $("#update-story-url").val();
+
+  await storyList.updateStory(currentUser, editStoryID, {title, author, url});
+
+  $updateStoryForm.trigger("reset");
+
+  hidePageComponents();
+  putUserStoriesOnPage();
+}
+
+$updateStoryForm.on("submit", updateUserStory);
+
+
+/** click event handler for when user clicks on cancel button during update story form process
  * Will remove a story from user own story list and update webpage to not dsiplay story anymore
 */
-// async function updateUserStory(evt) {
-//   console.debug("updateUserStory", evt);
-//   evt.preventDefault();
+function cancelButtonClick(e) {
+  console.debug("cancelButtonClick", e);
 
-//   const author = $("#story-author").val();
-//   const title = $("#story-title").val();
-//   const url = $("#story-url").val();
+  hidePageComponents();
+  $userStoriesList.show();
+}
 
-//   // User.signup retrieves user info from API and returns User instance
-//   // which we'll make the globally-available, logged-in user.
-//   await storyList.updateStory(currentUser, editStoryID, {title, author, url});
-
-//   const $story = generateStoryMarkup(story);
-//   $allStoriesList.prepend($story);
-//   // $('.trash').remove();
-  
-//   // hide the form and reset it
-//   $submitForm.slideUp("slow");
-//   $submitForm.trigger("reset");
-// }
-
-// $submitForm.on("submit", updateUserStory);
-
-// async function updateUserStories(e) {
-//   console.debug("updateUserStories", e);
-  
-//   const $edit = $(e.target);
-//   const storyId = $edit.closest('li').attr('id');
-
-
-  
-//   await storyList.deleteStory(currentUser, storyId);
-
-//   hidePageComponents();
-//   putUserStoriesOnPage();
-// }
-
-// $storiesLists.on('click', '.edit', updateUserStories);
+$("#cancel-button").on('click', cancelButtonClick);

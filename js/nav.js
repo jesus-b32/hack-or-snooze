@@ -32,7 +32,7 @@ $navLogin.on("click", navLoginClick);
 
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
-  
+
   $(".main-nav-links").show(); // . class "main-nav-links" not currently defined
   $navLogin.hide();
   $navLogOut.show();
@@ -74,3 +74,16 @@ function navMyStoriesClick(evt) {
   putUserStoriesOnPage();
 }
 $navMyStories.on("click", navMyStoriesClick);
+
+
+/** Show Submit form on click on "Submit Story" */
+
+function navUserProfileClick(evt) {
+  console.debug("navUserProfileClick", evt);
+
+  hidePageComponents();
+  $('#update-name-form').show();
+  $('#update-password-form').show();
+}
+
+$navUserProfile.on("click", navUserProfileClick);

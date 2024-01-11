@@ -143,6 +143,20 @@ class StoryList {
         story.url = url;
       }
     }
+    for(let story of user.favorites) {
+      if(story.storyId === storyId)  {
+        story.title = title;
+        story.author = author;
+        story.url = url;
+      }
+    }
+    for(let story of user.ownStories) {
+      if(story.storyId === storyId)  {
+        story.title = title;
+        story.author = author;
+        story.url = url;
+      }
+    }
     //do the sdame for favorites and own storyies list
   }
 }
@@ -305,4 +319,10 @@ class User {
       return val.storyId === story.storyId;
     });
   }
+
+
+
+
+
+  
 }
