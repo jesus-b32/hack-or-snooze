@@ -2,6 +2,7 @@
 
 // This is the global list of the stories, an instance of StoryList
 let storyList;
+let editStoryID;
 // console.log(storyList);
 
 /** Get and show stories when site first loads. */
@@ -25,7 +26,7 @@ function generateStar(story, user) {
   return `<span class="star"><i class="${starStyle} fa-star"></i></span>`;
 }
 
-// create HTML for star based on whether story is favorited or not
+// create HTML for trash based on whether story user has their own stories
 function generateTrash(user) {
   let trash = '';
   if (user.ownStories.length) {
@@ -33,6 +34,17 @@ function generateTrash(user) {
   } 
 
   return trash;
+}
+
+
+// create HTML for edit button based on whether story user has their own stories
+function generateEdit(user) {
+  let edit = '';
+  if (user.ownStories.length) {
+    edit = '<button type="button" class="edit">Edit</button>';
+  } 
+
+  return edit;
 }
 
 
@@ -51,9 +63,11 @@ function generateStoryMarkup(story) {
   // if user is logged in, display favorite stars; otherwise don't
   let starHTML = '';
   let trashHTML = '';
+  let editHTML = '';
     if (currentUser) {
       starHTML = generateStar(story, currentUser);
       trashHTML = generateTrash(currentUser);
+      editHTML = generateEdit(currentUser);
     } else {
       starHTML = '';
     }
@@ -66,6 +80,7 @@ function generateStoryMarkup(story) {
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
+        ${editHTML}
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
       </li>
@@ -90,6 +105,8 @@ function putStoriesOnPage() {
     $allStoriesList.append($story);
   }
   $('.trash').remove();
+  $('.edit').remove();
+
   $allStoriesList.show();
 }
 
@@ -110,6 +127,7 @@ async function submitStory(evt) {
   const $story = generateStoryMarkup(story);
   $allStoriesList.prepend($story);
   $('.trash').remove();
+  $('.edit').remove();
   
   // hide the form and reset it
   $submitForm.slideUp("slow");
@@ -139,6 +157,7 @@ function putFavoritesOnPage() {
   }
 
   $('.trash').remove();
+  $('.edit').remove();
   $favoriteList.show();
 }
 
@@ -190,6 +209,7 @@ function putUserStoriesOnPage() {
     $userStoriesList.append($story);
   }
 
+
   $userStoriesList.show();
 }
 
@@ -210,3 +230,65 @@ async function deleteUserStories(e) {
 }
 
 $userStoriesList.on('click', '.trash', deleteUserStories);
+
+
+
+/** click event handler for when user clicks on trash can symbol
+ * Will remove a story from user own story list and update webpage to not dsiplay story anymore
+*/
+function editButtonClick(e) {
+  console.debug("editButtonClick", e);
+  
+  const $edit = $(e.target);
+  editStoryID = $edit.closest('li').attr('id');
+
+  hidePageComponents();
+  $submitForm.show();
+}
+
+$storiesLists.on('click', '.edit', editButtonClick);
+
+
+
+
+/** click event handler for when user clicks on trash can symbol
+ * Will remove a story from user own story list and update webpage to not dsiplay story anymore
+*/
+// async function updateUserStory(evt) {
+//   console.debug("updateUserStory", evt);
+//   evt.preventDefault();
+
+//   const author = $("#story-author").val();
+//   const title = $("#story-title").val();
+//   const url = $("#story-url").val();
+
+//   // User.signup retrieves user info from API and returns User instance
+//   // which we'll make the globally-available, logged-in user.
+//   await storyList.updateStory(currentUser, editStoryID, {title, author, url});
+
+//   const $story = generateStoryMarkup(story);
+//   $allStoriesList.prepend($story);
+//   // $('.trash').remove();
+  
+//   // hide the form and reset it
+//   $submitForm.slideUp("slow");
+//   $submitForm.trigger("reset");
+// }
+
+// $submitForm.on("submit", updateUserStory);
+
+// async function updateUserStories(e) {
+//   console.debug("updateUserStories", e);
+  
+//   const $edit = $(e.target);
+//   const storyId = $edit.closest('li').attr('id');
+
+
+  
+//   await storyList.deleteStory(currentUser, storyId);
+
+//   hidePageComponents();
+//   putUserStoriesOnPage();
+// }
+
+// $storiesLists.on('click', '.edit', updateUserStories);

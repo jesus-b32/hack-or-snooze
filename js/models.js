@@ -132,12 +132,18 @@ class StoryList {
       data: {token: user.loginToken, story: {title, author, url}},
     });
 
-    const newStory = new Story(response.data.story);
-    this.stories.unshift(newStory); //need to append updated story to same location as previous story; use splice to remove old story and replace it with new one \
-    //or just edit the title, author, and url values of the current story(probably the better option)
-    user.ownStories.unshift(newStory); //same as above
+    // const newStory = new Story(response.data.story);
+    // this.stories = this.stories.reduce(val => {
 
-    return newStory;
+    // })
+    for(let story of this.stories) {
+      if(story.storyId === storyId)  {
+        story.title = title;
+        story.author = author;
+        story.url = url;
+      }
+    }
+    //do the sdame for favorites and own storyies list
   }
 }
 
