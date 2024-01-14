@@ -82,6 +82,9 @@ function navUserProfileClick(evt) {
   console.debug("navUserProfileClick", evt);
 
   hidePageComponents();
+  $('#user-name').empty();
+  $('#user-name').append(`Welcome ${currentUser.name}`);
+  $('#user-name').show();
   $('#update-name-form').show();
   $('#update-password-form').show();
 }

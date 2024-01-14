@@ -43,7 +43,10 @@ function hidePageComponents() {
     $loginForm,
     $signupForm,
     $submitForm,
-    $updateStoryForm
+    $updateStoryForm,
+    $('#update-name-form'),
+    $('#update-password-form'),
+    $('#user-name') //Name welcome in user profile page
   ];
   components.forEach(c => c.hide()); // jQuery method that hides the selected elements.This is similar to the CSS property display:none.
   // Hidden elements will not be displayed at all (no longer affects the layout of the page).

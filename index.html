@@ -175,12 +175,15 @@
 
 <!-- name and password update forms in user profile-->
 <section class="account-forms-container container" id="user-profile-section">
+  <h3 class="hidden" id="user-name"></h3>
   <!-- Update name form -->
   <form action="#" id="update-name-form" class="account-form hidden" method="post">
     <h4>Update Name</h4>
     <div class="login-input">
       <label for="update-name">Name</label>
       <input id="update-name" autocapitalize="words">
+      <!-- <label for="update-name-password">Passoword</label>
+      <input id="update-name-password" autocomplete="new-password" type="password"> -->
     </div>
     <button type="submit">Update</button>
   </form>
@@ -189,8 +192,12 @@
   <form action="#" id="update-password-form" class="account-form hidden" method="post">
     <h4>Update Password</h4>
     <div class="login-input">
+      <label for="current-password">Current Passoword</label>
+      <input id="current-password" autocomplete="new-password" type="password">
       <label for="update-password">Passoword</label>
       <input id="update-password" autocomplete="new-password" type="password">
+      <label for="confirm-update-password">Confirm Passoword</label>
+      <input id="confirm-update-password" autocomplete="new-password" type="password">
       <i class="fa-solid fa-eye-slash" id="update-user-eye"></i>
     </div>
     <button type="submit">Update</button>

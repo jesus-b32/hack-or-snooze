@@ -109,6 +109,27 @@ async function signup(evt) {
 
 $signupForm.on("submit", signup);
 
+
+/** Handle current user name update on form submission. */
+
+async function UpdateName(evt) {
+  console.debug("UpdateName", evt);
+  evt.preventDefault();
+
+  const name = $("#update-name").val();
+  // const password = $("#update-name-password").val();
+
+  // Sends new name info to API
+  await currentUser.updateUser(name);
+
+  //refresh name welcome title
+  $('#user-name').empty();
+  $('#user-name').append(`Welcome ${currentUser.name}`);
+  $("#update-name-form").trigger("reset");
+}
+
+$("#update-name-form").on("submit", UpdateName);
+
 /** Handle click of logout button
  *
  * Remove their credentials from localStorage and refresh page
