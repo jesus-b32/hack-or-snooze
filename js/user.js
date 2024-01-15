@@ -37,17 +37,45 @@ $("#signup-eye").on('click', signupTogglePassword);
 
 
 /** Handle password toggle click for login form. */
-function updateUserTogglePassword(e) {
+function currentPassowrdToggle(e) {
+  // toggle the passowrd type attribute
+  const password = $("#current-password");
+  const type = password.attr('type') === 'password' ? 'text' : 'password';
+  password.attr('type', type);
+
+  // toggle the eye / eye slash icon
+  $("#current-password-eye").toggleClass('fa-eye-slash fa-eye');
+}
+
+$("#current-password-eye").on('click', currentPassowrdToggle);
+
+
+/** Handle password toggle click for login form. */
+function passowrdToggle(e) {
   // toggle the passowrd type attribute
   const password = $("#update-password");
   const type = password.attr('type') === 'password' ? 'text' : 'password';
   password.attr('type', type);
 
   // toggle the eye / eye slash icon
-  $("#update-user-eye").toggleClass('fa-eye-slash fa-eye');
+  $("#password-eye").toggleClass('fa-eye-slash fa-eye');
 }
 
-$("#update-user-eye").on('click', updateUserTogglePassword);
+$("#password-eye").on('click', passowrdToggle);
+
+
+/** Handle password toggle click for login form. */
+function confirmPasswordToggle(e) {
+  // toggle the passowrd type attribute
+  const password = $("#confirm-update-password");
+  const type = password.attr('type') === 'password' ? 'text' : 'password';
+  password.attr('type', type);
+
+  // toggle the eye / eye slash icon
+  $("#confirm-password-eye").toggleClass('fa-eye-slash fa-eye');
+}
+
+$("#confirm-password-eye").on('click', confirmPasswordToggle);
 
 /******************************************************************************
  * User login/signup/login
@@ -112,7 +140,7 @@ $signupForm.on("submit", signup);
 
 /** Handle current user name update on form submission. */
 
-async function UpdateName(evt) {
+async function updateName(evt) {
   console.debug("UpdateName", evt);
   evt.preventDefault();
 
@@ -120,7 +148,7 @@ async function UpdateName(evt) {
   // const password = $("#update-name-password").val();
 
   // Sends new name info to API
-  await currentUser.updateUser(name);
+  await currentUser.changeName(name);
 
   //refresh name welcome title
   $('#user-name').empty();
@@ -128,7 +156,31 @@ async function UpdateName(evt) {
   $("#update-name-form").trigger("reset");
 }
 
-$("#update-name-form").on("submit", UpdateName);
+$("#update-name-form").on("submit", updateName);
+
+
+/** Handle current user name update on form submission. */
+
+async function updatePassword(evt) {
+  console.debug("updatePassword", evt);
+  evt.preventDefault();
+
+  const currentPassword = $("#current-password").val();
+  const password = $("#update-password").val();
+  const confirmPassword = $("#confirm-update-password").val();
+
+  if (currentPassword === currentUser.password && password === confirmPassword) {
+    await currentUser.changePassword(password);
+    $("#update-name-form").trigger("reset");
+  } else {
+    alert('Incorrect password or Could not confirm new password due to mismatch.');
+  }
+  // Sends new name info to API
+
+}
+
+$("#update-password-form").on("submit", updatePassword);
+
 
 /** Handle click of logout button
  *

@@ -297,34 +297,44 @@ class User {
    * - name: the user's full name
    */
 
-    async updateUser(name) {
-      // try {
-        const username = this.username;
-        const password = this.password;
+    async updateUser(name, username, password) {
         await axios({
           url: `${BASE_URL}/users/${username}`,
           method: "PATCH",
           data: {user: {name, username, password}, token: this.loginToken},
         });
+    }
+
+
+    /** Register new user in API, make User instance & return it.
+ *
+ * - username: a new username
+ * - password: a new password
+ * - name: the user's full name
+ */
+
+    async changeName(name) {
+        const username = this.username;
+        const password = this.password;
+        await this.updateUser(name, username, password);
 
         this.name = name;
-    
-        // let { user } = response.data; // destructuring; stroing user object into user variable
-    
-        // return new User( // store user object data to class User properties/varaibles
-        //   {
-        //     username: user.username,
-        //     name: user.name,
-        //     createdAt: user.createdAt,
-        //     favorites: user.favorites,
-        //     ownStories: user.stories
-        //   },
-        //   response.data.token
-        // );
-      // } catch(e) {
-        // console.log(e.response.data.error.message);
-        // return e;
-      // }
+    }
+
+
+        /** Register new user in API, make User instance & return it.
+   *
+   * - username: a new username
+   * - password: a new password
+   * - name: the user's full name
+   */
+
+    async changePassword(password) {
+        const username = this.username;
+        const name = this.name;
+        await this.updateUser(name, username, password);
+
+        this.password = password;
     }
 
   /** When we already have credentials (token & username) for a user,

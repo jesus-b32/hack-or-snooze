@@ -182,8 +182,6 @@
     <div class="login-input">
       <label for="update-name">Name</label>
       <input id="update-name" autocapitalize="words">
-      <!-- <label for="update-name-password">Passoword</label>
-      <input id="update-name-password" autocomplete="new-password" type="password"> -->
     </div>
     <button type="submit">Update</button>
   </form>
@@ -191,14 +189,16 @@
   <!-- Update Password form -->
   <form action="#" id="update-password-form" class="account-form hidden" method="post">
     <h4>Update Password</h4>
-    <div class="login-input">
+    <div class="login-input" id="update-password-section">
       <label for="current-password">Current Passoword</label>
       <input id="current-password" autocomplete="new-password" type="password">
+      <i class="fa-solid fa-eye-slash" id="current-password-eye"></i>
       <label for="update-password">Passoword</label>
       <input id="update-password" autocomplete="new-password" type="password">
+      <i class="fa-solid fa-eye-slash" id="password-eye"></i>
       <label for="confirm-update-password">Confirm Passoword</label>
       <input id="confirm-update-password" autocomplete="new-password" type="password">
-      <i class="fa-solid fa-eye-slash" id="update-user-eye"></i>
+      <i class="fa-solid fa-eye-slash" id="confirm-password-eye"></i>
     </div>
     <button type="submit">Update</button>
   </form>
