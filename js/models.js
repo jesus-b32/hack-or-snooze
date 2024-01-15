@@ -202,7 +202,7 @@ class User {
   constructor({
                 username,
                 name,
-                password,
+                // password,
                 createdAt,
                 favorites = [],
                 ownStories = []
@@ -236,13 +236,15 @@ class User {
         data: { user: { username, password, name } },
       });
   
+      console.log('Response: ', response);
+      console.log('Response Data: ', response.data);
       let { user } = response.data; // destructuring; stroing user object into user variable
-  
+      console.log('User Variable: ', user);
       return new User( // store user object data to class User properties/varaibles
         {
           username: user.username,
           name: user.name,
-          password: user.password,
+          password: password,
           createdAt: user.createdAt,
           favorites: user.favorites,
           ownStories: user.stories
@@ -269,14 +271,16 @@ class User {
         data: { user: { username, password } },
       });
   
-      
+      // console.log('Response: ', response);
+      // console.log('Response Data: ', response.data);
       let { user } = response.data; // destructuring; stroing user object into user variable
+      // console.log('User Variable: ', user);
   
       return new User( // store user object data to class User properties/varaibles
         {
           username: user.username,
           name: user.name,
-          password: user.password,
+          password: password,
           createdAt: user.createdAt,
           favorites: user.favorites,
           ownStories: user.stories
@@ -350,12 +354,13 @@ class User {
       });
 
       let { user } = response.data;
+      // console.log('This.password: ', this,password);
 
       return new User(
         {
           username: user.username,
           name: user.name,
-          password: user.password,
+          // password: this.password,
           createdAt: user.createdAt,
           favorites: user.favorites,
           ownStories: user.stories

@@ -173,9 +173,13 @@ async function updatePassword(evt) {
     await currentUser.changePassword(password);
     $("#update-name-form").trigger("reset");
   } else {
+    console.log('Current Password: ', currentPassword);
+    console.log('Current User Password: ', currentUser.password);
+    console.log('Current User: ', currentUser);
+    console.log('Password: ', password);
+    console.log('Confirm Password: ', confirmPassword);
     alert('Incorrect password or Could not confirm new password due to mismatch.');
   }
-  // Sends new name info to API
 
 }
 
