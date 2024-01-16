@@ -69,7 +69,7 @@ function generateStoryMarkup(story) {
       trashHTML = generateTrash(currentUser);
       editHTML = generateEdit(currentUser);
     } else {
-      starHTML = ''; // what is this for???
+      starHTML = ''; // do not generate favorite start html when there is no user logged in
     }
 
   return $(`
