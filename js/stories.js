@@ -69,7 +69,7 @@ function generateStoryMarkup(story) {
       trashHTML = generateTrash(currentUser);
       editHTML = generateEdit(currentUser);
     } else {
-      starHTML = '';
+      starHTML = ''; // what is this for???
     }
 
   return $(`
@@ -104,7 +104,7 @@ function putStoriesOnPage() {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
   }
-  $('.trash').remove();
+  $('.trash').remove(); // remove trash symbol and edit button on stories lists that are not user own story list
   $('.edit').remove();
 
   $allStoriesList.show();
@@ -120,13 +120,12 @@ async function submitStory(evt) {
   const title = $("#story-title").val();
   const url = $("#story-url").val();
 
-  // User.signup retrieves user info from API and returns User instance
-  // which we'll make the globally-available, logged-in user.
+  // storylist.addstory sends new story info to API
   const story = await storyList.addStory(currentUser, {title, author, url});
 
   const $story = generateStoryMarkup(story);
   $allStoriesList.prepend($story);
-  $('.trash').remove();
+  $('.trash').remove(); // remove trash symbol and edit button on stories lists that are not user own story list
   $('.edit').remove();
   
   // hide the form and reset it
@@ -156,8 +155,9 @@ function putFavoritesOnPage() {
     $favoriteList.append($story);
   }
 
-  $('.trash').remove();
+  $('.trash').remove(); // remove trash symbol and edit button on stories lists that are not user own story list
   $('.edit').remove();
+
   $favoriteList.show();
 }
 
@@ -240,7 +240,7 @@ function editButtonClick(e) {
   console.debug("editButtonClick", e);
   
   const $edit = $(e.target);
-  editStoryID = $edit.closest('li').attr('id');
+  editStoryID = $edit.closest('li').attr('id'); // store storyid in global variable
 
   hidePageComponents();
   $updateStoryForm.show();
@@ -251,7 +251,7 @@ $userStoriesList.on('click', '.edit', editButtonClick);
 
 
 
-/** click event handler for when user clicks on edit button
+/** click event handler for when user clicks on submit button for story update form
  * Will update the story from user own story list and update webpage to  display updated story
  * 
 */

@@ -83,10 +83,9 @@ function navUserProfileClick(evt) {
 
   hidePageComponents();
   $('#user-name').empty();
-  $('#user-name').append(`Welcome ${currentUser.name}`);
+  $('#user-name').append(`Welcome ${currentUser.name}`); //welcome title for user profile page
   $('#user-name').show();
-  $('#update-name-form').show();
-  $('#update-password-form').show();
+  $('#update-user-form').show();
 }
 
 $navUserProfile.on("click", navUserProfileClick);

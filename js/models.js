@@ -78,7 +78,6 @@ class StoryList {
 
   async addStory(user, {title, author, url}) {
        // query the /stories endpoint (auth required)
-      //  try {
         const response = await axios({
           url: `${BASE_URL}/stories`,
           method: "POST",
@@ -90,43 +89,13 @@ class StoryList {
         user.ownStories.unshift(newStory);
 
         return newStory;
-      //  } catch(e) {
-      //   // alert('Error Occured');
-      //  }
   }
 
 
-    /** Adds story data to API, makes a Story instance, adds it to story list.
+      /** Delete a story from API and remove it from story list.
    * - user - the current instance of User who will post the story
-   * - obj of {title, author, url}
+   * - storyid
    *
-   * Returns the new Story instance
-   */
-
-    async userPassword(user, {title, author, url}) {
-      // query the /stories endpoint (auth required)
-     //  try {
-       const response = await axios({
-         url: `${BASE_URL}/stories`,
-         method: "POST",
-         data: {story: {title, author, url}, token: user.loginToken},
-       });
-
-       const newStory = new Story(response.data.story);
-       this.stories.unshift(newStory);
-       user.ownStories.unshift(newStory);
-
-       return newStory;
-     //  } catch(e) {
-     //   // alert('Error Occured');
-     //  }
- }
-
-      /** Delete a story from API and remove it ffrom story list.
-   * - user - the current instance of User who will post the story
-   * - obj of {title, author, url}
-   *
-   * Returns the new Story instance
    */
   async deleteStory(user, storyId) {
     user.ownStories = user.ownStories.filter(val => {
@@ -148,6 +117,7 @@ class StoryList {
 
         /** Update a story from API and update the sotru on story list and dsiplay updated storylist.
    * - user - the current instance of User who will post the story
+   * - storyid
    * - obj of {title, author, url}
    *
    * Returns the new Story instance
@@ -159,10 +129,6 @@ class StoryList {
       data: {token: user.loginToken, story: {title, author, url}},
     });
 
-    // const newStory = new Story(response.data.story);
-    // this.stories = this.stories.reduce(val => {
-
-    // })
     for(let story of this.stories) {
       if(story.storyId === storyId)  {
         story.title = title;
@@ -184,7 +150,6 @@ class StoryList {
         story.url = url;
       }
     }
-    //do the sdame for favorites and own storyies list
   }
 }
 
@@ -202,7 +167,6 @@ class User {
   constructor({
                 username,
                 name,
-                // password,
                 createdAt,
                 favorites = [],
                 ownStories = []
@@ -210,7 +174,6 @@ class User {
               token) {
     this.username = username;
     this.name = name;
-    this.password = password;
     this.createdAt = createdAt;
 
     // instantiate Story instances for the user's favorites and ownStories
@@ -244,7 +207,6 @@ class User {
         {
           username: user.username,
           name: user.name,
-          password: password,
           createdAt: user.createdAt,
           favorites: user.favorites,
           ownStories: user.stories
@@ -271,16 +233,12 @@ class User {
         data: { user: { username, password } },
       });
   
-      // console.log('Response: ', response);
-      // console.log('Response Data: ', response.data);
       let { user } = response.data; // destructuring; stroing user object into user variable
-      // console.log('User Variable: ', user);
   
       return new User( // store user object data to class User properties/varaibles
         {
           username: user.username,
           name: user.name,
-          password: password,
           createdAt: user.createdAt,
           favorites: user.favorites,
           ownStories: user.stories
@@ -294,11 +252,11 @@ class User {
   }
 
 
-    /** Register new user in API, make User instance & return it.
+    /** Update current user in API by submiting new name and password
    *
-   * - username: a new username
-   * - password: a new password
-   * - name: the user's full name
+   * - username: current username
+   * - password: a new or same password
+   * - name: new name
    */
 
     async updateUser(name, username, password) {
@@ -307,38 +265,8 @@ class User {
           method: "PATCH",
           data: {user: {name, username, password}, token: this.loginToken},
         });
-    }
 
-
-    /** Register new user in API, make User instance & return it.
- *
- * - username: a new username
- * - password: a new password
- * - name: the user's full name
- */
-
-    async changeName(name) {
-        const username = this.username;
-        const password = this.password;
-        await this.updateUser(name, username, password);
-
-        this.name = name;
-    }
-
-
-        /** Register new user in API, make User instance & return it.
-   *
-   * - username: a new username
-   * - password: a new password
-   * - name: the user's full name
-   */
-
-    async changePassword(password) {
-        const username = this.username;
-        const name = this.name;
-        await this.updateUser(name, username, password);
-
-        this.password = password;
+        this.name = name; //update name instance of currentUser
     }
 
   /** When we already have credentials (token & username) for a user,
@@ -354,13 +282,11 @@ class User {
       });
 
       let { user } = response.data;
-      // console.log('This.password: ', this,password);
 
       return new User(
         {
           username: user.username,
           name: user.name,
-          // password: this.password,
           createdAt: user.createdAt,
           favorites: user.favorites,
           ownStories: user.stories
@@ -372,6 +298,19 @@ class User {
       return null;
     }
   }
+
+ /** Add or delete a story to user favorite list in API
+  * - methodName: determines whether function will add or delete a story to favorite list
+  * - story
+   */
+  async addOrDeleteFavorite(methodName, story) {
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: methodName,
+      data: {token: this.loginToken},
+    });
+  }
+
 
   /** Add story to user's favorite list
    */
@@ -387,15 +326,6 @@ class User {
       return val.storyId !== story.storyId;
     });
     await this.addOrDeleteFavorite("DELETE", story);
-  }
-
-
-  async addOrDeleteFavorite(methodName, story) {
-    await axios({
-      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
-      method: methodName,
-      data: {token: this.loginToken},
-    });
   }
 
   // return true if story is in the users favorite stories list

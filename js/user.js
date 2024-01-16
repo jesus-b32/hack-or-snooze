@@ -37,45 +37,17 @@ $("#signup-eye").on('click', signupTogglePassword);
 
 
 /** Handle password toggle click for login form. */
-function currentPassowrdToggle(e) {
-  // toggle the passowrd type attribute
-  const password = $("#current-password");
-  const type = password.attr('type') === 'password' ? 'text' : 'password';
-  password.attr('type', type);
-
-  // toggle the eye / eye slash icon
-  $("#current-password-eye").toggleClass('fa-eye-slash fa-eye');
-}
-
-$("#current-password-eye").on('click', currentPassowrdToggle);
-
-
-/** Handle password toggle click for login form. */
-function passowrdToggle(e) {
+function changePassowrdToggle(e) {
   // toggle the passowrd type attribute
   const password = $("#update-password");
   const type = password.attr('type') === 'password' ? 'text' : 'password';
   password.attr('type', type);
 
   // toggle the eye / eye slash icon
-  $("#password-eye").toggleClass('fa-eye-slash fa-eye');
+  $("#update-password-eye").toggleClass('fa-eye-slash fa-eye');
 }
 
-$("#password-eye").on('click', passowrdToggle);
-
-
-/** Handle password toggle click for login form. */
-function confirmPasswordToggle(e) {
-  // toggle the passowrd type attribute
-  const password = $("#confirm-update-password");
-  const type = password.attr('type') === 'password' ? 'text' : 'password';
-  password.attr('type', type);
-
-  // toggle the eye / eye slash icon
-  $("#confirm-password-eye").toggleClass('fa-eye-slash fa-eye');
-}
-
-$("#confirm-password-eye").on('click', confirmPasswordToggle);
+$("#update-password-eye").on('click', changePassowrdToggle);
 
 /******************************************************************************
  * User login/signup/login
@@ -95,13 +67,13 @@ async function login(evt) {
   // which we'll make the globally-available, logged-in user.
   currentUser = await User.login(username, password);
 
-  // jQuery method; triggers the specified event and the default behavior of an event for the selected elements.
-  // will trigger form rest event, which resets the value of all elements in a form, and default form behavior of reloading webpage
   if(!(currentUser instanceof User)){
     alert(currentUser.response.data.error.message);
     return;
   }
 
+   // jQuery method; triggers the specified event and the default behavior of an event for the selected elements.
+  // will trigger form rest event, which resets the value of all elements in a form, and default form behavior of reloading webpage
   $loginForm.trigger("reset");
 
   saveUserCredentialsInLocalStorage();
@@ -140,50 +112,23 @@ $signupForm.on("submit", signup);
 
 /** Handle current user name update on form submission. */
 
-async function updateName(evt) {
-  console.debug("UpdateName", evt);
+async function updateNameAndPassword(evt) {
+  console.debug("updateNameAndPassword", evt);
   evt.preventDefault();
 
   const name = $("#update-name").val();
-  // const password = $("#update-name-password").val();
+  const password = $("#update-password").val();
 
   // Sends new name info to API
-  await currentUser.changeName(name);
+  await currentUser.updateUser(name, currentUser.username, password);
 
   //refresh name welcome title
   $('#user-name').empty();
   $('#user-name').append(`Welcome ${currentUser.name}`);
-  $("#update-name-form").trigger("reset");
+  $("#update-user-form").trigger("reset");
 }
 
-$("#update-name-form").on("submit", updateName);
-
-
-/** Handle current user name update on form submission. */
-
-async function updatePassword(evt) {
-  console.debug("updatePassword", evt);
-  evt.preventDefault();
-
-  const currentPassword = $("#current-password").val();
-  const password = $("#update-password").val();
-  const confirmPassword = $("#confirm-update-password").val();
-
-  if (currentPassword === currentUser.password && password === confirmPassword) {
-    await currentUser.changePassword(password);
-    $("#update-name-form").trigger("reset");
-  } else {
-    console.log('Current Password: ', currentPassword);
-    console.log('Current User Password: ', currentUser.password);
-    console.log('Current User: ', currentUser);
-    console.log('Password: ', password);
-    console.log('Confirm Password: ', confirmPassword);
-    alert('Incorrect password or Could not confirm new password due to mismatch.');
-  }
-
-}
-
-$("#update-password-form").on("submit", updatePassword);
+$("#update-user-form").on("submit", updateNameAndPassword);
 
 
 /** Handle click of logout button

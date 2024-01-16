@@ -109,9 +109,35 @@ body {
   
   /* responsive queries for tightening things up for mobile. */
   
-  @media screen and (max-width: 576px) {
+  /* This section stacks the nav bar ontop of each other */
+  @media screen and (max-width: 700px) {
+    nav {
+      flex-direction: column;
+      padding: 0px;
+      border-radius: 0px;
+    }
+
+    nav .nav-right{
+      margin-left: 0px;
+    }
+
+    #nav-submit{
+      border-left: 0px;
+      padding-left: 0px;
+    }
     body {
       margin: 0;
+    }
+  }
+
+  /* rearrange lables of inputs and make input width 90% */
+  @media screen and (max-width: 460px) {
+    form label {
+      display: block;
+      text-align: left;
+    }
+    form input {
+      width: 90%;
     }
   }
   

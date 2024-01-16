@@ -13,8 +13,6 @@ const $favoriteList = $("#favorite-stories-list");
 const $userStoriesList = $('#user-stories-list')
 const $storiesLists = $('.stories-list'); // consist of all stories, favoiirtes stories, and user stories
 
-// const $eyeSymbol = $(".eye");
-// const $loginSignupSection = $("#login-signup-section");
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
 const $submitForm = $('#story-form');
@@ -44,8 +42,7 @@ function hidePageComponents() {
     $signupForm,
     $submitForm,
     $updateStoryForm,
-    $('#update-name-form'),
-    $('#update-password-form'),
+    $('#update-user-form'),
     $('#user-name') //Name welcome in user profile page
   ];
   components.forEach(c => c.hide()); // jQuery method that hides the selected elements.This is similar to the CSS property display:none.
