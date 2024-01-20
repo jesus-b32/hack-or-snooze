@@ -123,6 +123,12 @@ async function submitStory(evt) {
   // storylist.addstory sends new story info to API
   const story = await storyList.addStory(currentUser, {title, author, url});
 
+  //throw an alert for error message
+  if(!(story instanceof Story)){ 
+    alert(story.response.data.error.message);
+    return;
+  }
+
   const $story = generateStoryMarkup(story);
   $allStoriesList.prepend($story);
   $('.trash').remove(); // remove trash symbol and edit button on stories lists that are not user own story list

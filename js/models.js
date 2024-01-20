@@ -78,6 +78,7 @@ class StoryList {
 
   async addStory(user, {title, author, url}) {
        // query the /stories endpoint (auth required)
+       try {
         const response = await axios({
           url: `${BASE_URL}/stories`,
           method: "POST",
@@ -89,6 +90,12 @@ class StoryList {
         user.ownStories.unshift(newStory);
 
         return newStory;
+       } catch(e) {
+        // console.log(e.response.data.error.message);
+        console.log(e);
+        return e;
+      
+       }
   }
 
 
